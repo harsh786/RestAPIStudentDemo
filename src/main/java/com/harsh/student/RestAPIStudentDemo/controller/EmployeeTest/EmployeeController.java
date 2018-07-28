@@ -1,7 +1,9 @@
 package com.harsh.student.RestAPIStudentDemo.controller.EmployeeTest;
 
 import java.beans.PropertyEditorSupport;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -20,13 +22,18 @@ import com.harsh.student.RestAPIStudentDemo.TestPropertiesConfig;
 import com.harsh.student.RestAPIStudentDemo.TestPropertiesConfig.students;
 import com.harsh.student.RestAPIStudentDemo.Repository.DeptRepo;
 import com.harsh.student.RestAPIStudentDemo.Repository.EmployeeRepo;
+import com.harsh.student.RestAPIStudentDemo.Repository.FullTimeEmplRepo;
 import com.harsh.student.RestAPIStudentDemo.Repository.GenderRepo;
 import com.harsh.student.RestAPIStudentDemo.Repository.HobbyRepo;
+import com.harsh.student.RestAPIStudentDemo.Repository.StudentRepo;
+import com.harsh.student.RestAPIStudentDemo.model.FullTimeEmployee;
+import com.harsh.student.RestAPIStudentDemo.model.FulleTimeEmpPhoneNo;
 import com.harsh.student.RestAPIStudentDemo.model.EmployeeTest.Employee;
 import com.harsh.student.RestAPIStudentDemo.model.EmployeeTest.Hobbies;
 import com.harsh.student.RestAPIStudentDemo.model.EmployeeTest.department;
 import com.harsh.student.RestAPIStudentDemo.service.Test1Service;
 import com.harsh.student.RestAPIStudentDemo.service.Test1ServiceImpl;
+import com.sun.jersey.api.client.ClientResponse.Status;
 
 
  class HobbiesEntityEditor extends PropertyEditorSupport {
@@ -75,7 +82,11 @@ public class EmployeeController {
 	@Autowired
 	private Test1Service objTest1ServiceImpl;
 	
-	
+	@Autowired
+	private FullTimeEmplRepo objFullTimeEmplRepo;
+
+	@Autowired
+	private StudentRepo objStudentRepo;
 	
 	public Test1Service getObjTest1ServiceImpl() {
 		return objTest1ServiceImpl;
@@ -134,14 +145,53 @@ public class EmployeeController {
 	@RequestMapping(value="/emp")
 	public String EmployeeOps(Model model)
 	{
+		
+	//	objStudentRepo.findOne(id)
+		
+		FullTimeEmployee objFullTimeEmployee=new FullTimeEmployee();
+		objFullTimeEmployee.setName("harsh1");
+		objFullTimeEmployee.setSalary(10000);
+		objFullTimeEmployee.setStatus(FullTimeEmployee.State.ACTIVE);
+		FulleTimeEmpPhoneNo objFulleTimeEmpPhoneNo=new FulleTimeEmpPhoneNo();
+		objFulleTimeEmpPhoneNo.setNumber("9582492891");
+		List<FulleTimeEmpPhoneNo>ls=objFullTimeEmployee.getLs();
+		ls.add(objFulleTimeEmpPhoneNo);
+		objFullTimeEmployee.setLs(ls);
+		objFulleTimeEmpPhoneNo.setObjFullTimeEmployee(objFullTimeEmployee);
+		objFullTimeEmplRepo.save(objFullTimeEmployee);
+		
 	//	TestPropertiesConfig o=	objTestPropertiesConfig;
 		students o=objTestPropertiesConfig.getObjstudents();
 		System.out.println(o.getId());
 		System.out.println(o.getName());
 		
 //		objTest1ServiceImpl.InsertDetailsTest1AndTest2();
-		objTest1ServiceImpl.InsertDetailsTest1AndTest2AnotherTran();
-	  Employee ob=	objEmployeeRepo.findOne(1);
+		//objTest1ServiceImpl.InsertDetailsTest1AndTest2AnotherTran();
+	    Employee ob=	objEmployeeRepo.findOne(1);
+	 
+		model.addAttribute("emp", ob);
+		//model.addAttribute("emp", new Employee());
+		return "EmpView";
+	}
+	@RequestMapping(value="/empupdate")
+	public String empupdate(Model model)
+	{
+		
+		FullTimeEmployee objFullTimeEmployee=objFullTimeEmplRepo.findOne(1L);
+		//FullTimeEmployee objFullTimeEmployee=new FullTimeEmployee();
+		objFullTimeEmployee.setName("harshupdate1");
+		objFullTimeEmployee.setSalary(2220000);
+		
+		objFullTimeEmplRepo.save(objFullTimeEmployee);
+		
+	//	TestPropertiesConfig o=	objTestPropertiesConfig;
+		students o=objTestPropertiesConfig.getObjstudents();
+		System.out.println(o.getId());
+		System.out.println(o.getName());
+		
+//		objTest1ServiceImpl.InsertDetailsTest1AndTest2();
+		//objTest1ServiceImpl.InsertDetailsTest1AndTest2AnotherTran();
+	    Employee ob=	objEmployeeRepo.findOne(1);
 	 
 		model.addAttribute("emp", ob);
 		//model.addAttribute("emp", new Employee());
@@ -192,6 +242,14 @@ public class EmployeeController {
 		objDeptRepo.findAll().forEach(item->mp.put(item.getId(),item.getName()));
 		return mp;
 		
+	}
+
+	public FullTimeEmplRepo getObjFullTimeEmplRepo() {
+		return objFullTimeEmplRepo;
+	}
+
+	public void setObjFullTimeEmplRepo(FullTimeEmplRepo objFullTimeEmplRepo) {
+		this.objFullTimeEmplRepo = objFullTimeEmplRepo;
 	}
 
 	

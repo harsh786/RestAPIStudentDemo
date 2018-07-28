@@ -11,7 +11,7 @@ public class TestPropertiesConfig {
  
 	private students objstudents;
 	
-	public static class students
+	public static class students		
 	{
 		private String name;
 		private int id;

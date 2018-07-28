@@ -92,4 +92,9 @@ public boolean InsertDetailsTest1AndTest2AnotherTran()
 	}
 return status;
 }
+
+public void FetchAssosciatedEntities()
+{
+	
+}
 }
