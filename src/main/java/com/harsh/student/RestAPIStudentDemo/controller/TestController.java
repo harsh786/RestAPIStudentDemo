@@ -116,7 +116,12 @@ public class TestController {
 	   // CacheControl mustRevalidate = CacheControl();'
 	    //mustRevalidate.mustRevalidate();
 	   
-	    return   ResponseEntity.status(HttpStatus.ACCEPTED).header("keysss", "values").cacheControl(CacheControl.maxAge(100000, TimeUnit.SECONDS).mustRevalidate()).location(URI.create("gfgg")).eTag("harsh1").body(Obj);
+	    
+	    
+	    return   ResponseEntity.status(HttpStatus.ACCEPTED).header("keysss", "values")
+	    		.cacheControl(CacheControl.maxAge(100000, TimeUnit.SECONDS).mustRevalidate())
+	    		.location(URI.create("gfgg"))
+	    		.eTag("harsh1").body(Obj);
 	    
 	 // return  ResponseEntity.ok().eTag("harsh1").body(Obj);
 	
